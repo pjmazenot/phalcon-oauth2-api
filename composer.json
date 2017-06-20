@@ -1,0 +1,38 @@
+{
+  "name": "pjmazenot/phalcon-oauth2-api",
+  "description": "Phalcon API Boilerplate Project With OAuth2 Server",
+  "version": "1.0.0-alpha",
+  "type": "project",
+  "keywords": ["php", "phalcon", "oauth2", "api", "wrapper", "project", "boilerplate", "server"],
+  "homepage": "https://github.com/pjmazenot",
+  "time": "2017-06-18",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Pierre-Julien Mazenot",
+      "email": "pj.mazenot@gmail.com",
+      "homepage": "https://github.com/pjmazenot",
+      "role": "Developer"
+    }
+  ],
+  "support": {
+    "email": "pj.mazenot@gmail.com",
+    "issues": "https://github.com/pjmazenot/phalcon-oauth2-api/issues",
+    "source": "https://github.com/pjmazenot/phalcon-oauth2-api"
+  },
+  "require": {
+    "php": ">=7.0.0",
+    "ext-phalcon": "3.*",
+    "league/oauth2-server": "5.*",
+    "guzzlehttp/psr7": "1.*"
+  },
+  "require-dev": {
+    "phalcon/devtools": "*",
+    "phalcon/incubator": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "League\\OAuth2\\Server\\": "src/"
+    }
+  }
+}
