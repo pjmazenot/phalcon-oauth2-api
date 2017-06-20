@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Entities\Repositories;
+
+use App\Entities\OAuth2RefreshToken;
+use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
+use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
+
+class Oauth2RefreshTokenRepository implements RefreshTokenRepositoryInterface  {
+
+	/**
+	 * Creates a new refresh token
+	 *
+	 * @return RefreshTokenEntityInterface
+	 */
+	public function getNewRefreshToken() {
+
+		$refreshToken = new OAuth2RefreshToken();
+
+		return $refreshToken;
+
+	}
+
+	/**
+	 * Create a new refresh token_name.
+	 *
+	 * @param RefreshTokenEntityInterface $refreshTokenEntity
+	 * @throws \Exception
+	 */
+	public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshTokenEntity) {
+
+		/** @var OAuth2RefreshToken $refreshTokenEntity */
+		if(!$refreshTokenEntity->save()) {
+			throw new \Exception('Unable to save the refresh token');
+		}
+
+	}
+
+	/**
+	 * Revoke the refresh token.
+	 *
+	 * @param string $tokenId
+	 * @throws \Exception
+	 */
+	public function revokeRefreshToken($tokenId) {
+
+		/** @var OAuth2RefreshToken $accessToken */
+		$accessToken = OAuth2RefreshToken::findFirst('refreshToken = "' . $tokenId . '"');
+
+		if($accessToken) {
+			$accessToken->setIsRevoked(true);
+			$accessToken->save();
+		} else {
+			throw new \Exception('Unable to revoke the refresh token');
+		}
+
+	}
+
+	/**
+	 * Check if the refresh token has been revoked.
+	 *
+	 * @param string $tokenId
+	 *
+	 * @return bool Return true if this token has been revoked
+	 */
+	public function isRefreshTokenRevoked($tokenId) {
+
+		/** @var OAuth2RefreshToken $accessToken */
+		$accessToken = OAuth2RefreshToken::findFirst('refreshToken = "' . $tokenId . '"');
+
+		return empty($accessToken) || $accessToken->getIsRevoked();
+
+	}
+
+}
