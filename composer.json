@@ -28,7 +28,8 @@
   },
   "require-dev": {
     "phalcon/devtools": "*",
-    "phalcon/incubator": "*"
+    "phalcon/incubator": "*",
+    "zircote/swagger-php": "*"
   },
   "autoload": {
     "psr-4": {
