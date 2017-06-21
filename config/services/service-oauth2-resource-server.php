@@ -18,7 +18,7 @@ $di->setShared(SERVICE_OAUTH2_RESOURCE_SERVER, function() /* use ($settings) */ 
 	// Init our repositories
 	$accessTokenRepository = new \App\Entities\Repositories\Oauth2AccessTokenRepository(); // instance of AccessTokenRepositoryInterface
 
-    $publicKey = PATH_CONFIGURATION . 'keys/cert.key';
+    $publicKey = PATH_CONFIGURATION . 'keys/public.cert';
 
 	// Setup the authorization server
     $server = new \League\OAuth2\Server\ResourceServer(

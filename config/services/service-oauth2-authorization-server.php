@@ -23,7 +23,7 @@ $di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() /* use ($settings
 	$refreshTokenRepository = new \App\Entities\Repositories\Oauth2RefreshTokenRepository(); // instance of RefreshTokenRepositoryInterface
 
 	$privateKey = PATH_CONFIGURATION . 'keys/private.key';
-	$publicKey = PATH_CONFIGURATION . 'keys/cert.key';
+	$publicKey = PATH_CONFIGURATION . 'keys/public.cert';
 
 	// Setup the authorization server
 	$server = new \League\OAuth2\Server\AuthorizationServer(
