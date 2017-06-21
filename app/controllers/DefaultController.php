@@ -15,6 +15,22 @@ use Phalcon\Http\Request as PhalconRequest;
  * Class DefaultController
  *
  * @package App\Controllers
+ *
+ * @SWG\Swagger(
+ *     info = @SWG\Info(
+ *        description = "Phalcon API OAuth2 Server",
+ *        version = "1.0.0-alpha",
+ *        title = "Phalcon API OAuth2 Server"
+ *     ),
+ *     consumes = {"application/json"},
+ *     produces = {"application/json"}
+ * )
+ *
+ *
+ * @SWG\Tag(
+ *   name="oauth2",
+ *   description="",
+ * )
  */
 class DefaultController extends Injectable {
 
@@ -100,6 +116,7 @@ class DefaultController extends Injectable {
 
 		$format = $this->request->get('format');
 
+	    // @TODO: Move this part to the $app->after() method?
 		switch ($format) {
 
 			case 'xml':

@@ -8,31 +8,53 @@ use App\Entities\Base\Model;
  * Class OAuth2AccessTokenModel
  *
  * @package App\Entities\Models
+ *
+ * @SWG\Definition(
+ *     required={"id"}
+ * )
  */
 abstract class OAuth2AccessTokenModel extends Model {
 
-    /** @var int BIGINT(20) */
+    /**
+     * @var int $id BIGINT(20)
+     * @SWG\Property(type="integer", format="int64")
+     */
     protected $id;
 
-	/** @var int BIGINT(20) */
+	/**
+	 * @var int $oauth2SessionId BIGINT(20)
+	 * @SWG\Property(type="integer", format="int64")
+	 */
 	protected $oauth2SessionId;
 
-    /** @var string CHAR(40) */
+    /**
+     * @var string $accessToken VARCHAR(100)
+     * @SWG\Property(type="string")
+     */
     protected $accessToken;
 
-    /** @var string DATETIME */
+    /**
+     * @var string $expireAt DATETIME
+     * @SWG\Property(type="string", format="date-time")
+     */
     protected $expireAt;
 
-    /** @var string DATETIME */
+    /**
+     * @var string $issuedAt DATETIME
+     * @SWG\Property(type="string", format="date-time")
+     */
     protected $issuedAt;
 
-	/** @var int */
+	/**
+	 * @var int $isRevoked TINYINT(1)
+	 * @SWG\Property(type="boolean")
+	 */
 	protected $isRevoked;
 
     /**
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
@@ -40,7 +62,7 @@ abstract class OAuth2AccessTokenModel extends Model {
     /**
      * @param int $id
      */
-    public function setId(int $id)
+    public function setId($id)
     {
         $this->id = $id;
     }
@@ -110,15 +132,15 @@ abstract class OAuth2AccessTokenModel extends Model {
 	/**
 	 * @return bool
 	 */
-	public function getIsRevoked(): bool {
-		return (bool)$this->isRevoked;
+	public function getIsRevoked() {
+		return $this->isRevoked;
 	}
 
 	/**
 	 * @param bool $isRevoked
 	 */
-	public function setIsRevoked( bool $isRevoked ) {
-		$this->isRevoked = (int)$isRevoked;
+	public function setIsRevoked($isRevoked) {
+		$this->isRevoked = $isRevoked;
 	}
 
 	public function getSource()
