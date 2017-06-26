@@ -27,6 +27,7 @@
     "guzzlehttp/psr7": "1.*"
   },
   "require-dev": {
+    "league/oauth2-client": "2.*",
     "phalcon/devtools": "*",
     "phalcon/incubator": "*",
     "zircote/swagger-php": "*"
@@ -34,6 +35,11 @@
   "autoload": {
     "psr-4": {
       "League\\OAuth2\\Server\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "League\\OAuth2\\Client\\": "src/"
     }
   }
 }

@@ -23,7 +23,7 @@ class Oauth2ClientRepository implements ClientRepositoryInterface {
 	public function getClientEntity($clientIdentifier, $grantType, $clientSecret = null, $mustValidateSecret = true) {
 
 		/** @var OAuth2Client $client */
-		$client = OAuth2Client::findFirst('id = ' . $clientIdentifier);
+		$client = OAuth2Client::findFirst('id = "' . $clientIdentifier . '"');
 
 		if(!$client) {
 			throw new \Exception('Invalid client ID');

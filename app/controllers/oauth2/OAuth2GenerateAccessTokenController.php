@@ -64,6 +64,7 @@ class OAuth2GenerateAccessTokenController extends DefaultController {
 			// All instances of OAuthServerException can be formatted into a HTTP response
 			// return $e->generateHttpResponse(new Psr7Response());
 			$this->send(500, [
+				'error' => $e->getMessage(),
 				'message' => $e->getMessage(),
 			]);
 
@@ -71,6 +72,7 @@ class OAuth2GenerateAccessTokenController extends DefaultController {
 
 			$this->send(500, [
 				'code' => $e->getCode(),
+				'error' => $e->getMessage(),
 				'message' => $e->getMessage(),
 				'trace' => $e->getTraceAsString(),
 			]);

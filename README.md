@@ -68,3 +68,8 @@ To generate the Swagger documentation for the application (`app` folder) run the
 ```bash
 php docs/swagger/generate.php
 ```
+
+## Tests
+
+### Examples
+`/docs/examples/client-client_credentials.php`

@@ -1,4 +1,6 @@
 <?php
+// @TODO: Move to phalcon tasks
+
 $baseDir = dirname(dirname(dirname(dirname(__FILE__))));
 
 // Loading vendors
