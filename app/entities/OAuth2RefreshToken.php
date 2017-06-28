@@ -4,6 +4,7 @@ namespace App\Entities;
 
 use App\Entities\Models\OAuth2AccessTokenModel;
 use App\Entities\Models\OAuth2RefreshTokenModel;
+use League\OAuth2\Client\Token\AccessToken;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
@@ -29,7 +30,7 @@ class OAuth2RefreshToken extends OAuth2RefreshTokenModel implements RefreshToken
      *
      * @return string
      */
-    public function getIdentifier(): string
+    public function getIdentifier()
     {
         return $this->getRefreshToken();
     }
@@ -49,10 +50,10 @@ class OAuth2RefreshToken extends OAuth2RefreshTokenModel implements RefreshToken
      *
      * @return \DateTime
      */
-    public function getExpiryDateTime(): \DateTime {
+    public function getExpiryDateTime() {
 
         if(!isset($this->expiryDateTime)) {
-            $expiryDateTime = new \DateTime($this->getExpireAt());
+            $expiryDateTime = new \DateTime($this->getExpiresAt());
             $this->expiryDateTime = $expiryDateTime;
         }
 
@@ -68,7 +69,7 @@ class OAuth2RefreshToken extends OAuth2RefreshTokenModel implements RefreshToken
     public function setExpiryDateTime(\DateTime $dateTime) {
 
         $this->expiryDateTime = $dateTime;
-        $this->setExpireAt($dateTime->format('Y-m-d H:i:s'));
+        $this->setExpiresAt($dateTime->format('Y-m-d H:i:s'));
 
     }
 
@@ -80,7 +81,9 @@ class OAuth2RefreshToken extends OAuth2RefreshTokenModel implements RefreshToken
     public function setAccessToken(AccessTokenEntityInterface $accessToken)
     {
 
+        /** @var AccessToken $accessToken */
         $this->accessToken = $accessToken;
+        $this->oauth2AccessTokenId = $accessToken->getId();
 
     }
 

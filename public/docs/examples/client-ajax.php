@@ -26,7 +26,55 @@ try {
 			$client_secret = isset( $post_data['client_secret'] ) ? $post_data['client_secret'] : '';
 
 			// Instantiate the OAuth2 client and generate an access token
-			$exampleOauth2Client = new ExampleOAuth2Client($client_id, $client_secret);
+			$exampleOauth2Client = new ExampleOAuth2Client($client_id, $client_secret, 'client_credentials');
+			$access_token = $exampleOauth2Client->getAccessToken();
+
+			// Add the token to the response data
+			$response['status']  = 'success';
+			$response['bearer'] = $access_token;
+
+			try {
+
+				// Test authentication using the API test url
+				$test = $exampleOauth2Client->request('get', 'http://' . $_SERVER['SERVER_NAME'] . '/oauth/test');
+
+				// Add the authentication results to the response data
+				$response['api_test'] = [
+					'status' => 'success',
+					'message' => $test
+				];
+
+			} catch (Exception $e) {
+
+				// Add the authentication error to the response data
+				$response['api_test'] = [
+					'status' => 'failed',
+					'message' => $e->getMessage()
+				];
+
+			}
+
+			break;
+
+		case 'password':
+
+			// Retrieve request params
+			$scope         = isset( $post_data['scope'] ) ? $post_data['scope'] : '';
+			$client_id     = isset( $post_data['client_id'] ) ? $post_data['client_id'] : '';
+			$client_secret = isset( $post_data['client_secret'] ) ? $post_data['client_secret'] : '';
+			$username      = isset( $post_data['username'] ) ? $post_data['username'] : '';
+			$password      = isset( $post_data['password'] ) ? $post_data['password'] : '';
+
+			// Instantiate the OAuth2 client and generate an access token
+			$exampleOauth2Client = new ExampleOAuth2Client(
+			    $client_id,
+                $client_secret,
+                'password',
+                [
+                    'username' => $username,
+                    'password' => $password,
+                ]
+            );
 			$access_token = $exampleOauth2Client->getAccessToken();
 
 			// Add the token to the response data

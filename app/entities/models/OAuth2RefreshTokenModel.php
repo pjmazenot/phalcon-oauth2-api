@@ -3,6 +3,7 @@
 namespace App\Entities\Models;
 
 use App\Entities\Base\Model;
+use Phalcon\Exception;
 
 /**
  * Class OAuth2RefreshTokenModel
@@ -21,7 +22,7 @@ abstract class OAuth2RefreshTokenModel extends Model {
 	protected $refreshToken;
 
     /** @var string DATETIME */
-    protected $expireAt;
+    protected $expiresAt;
 
     /** @var string DATETIME */
     protected $issuedAt;
@@ -74,15 +75,15 @@ abstract class OAuth2RefreshTokenModel extends Model {
 	/**
 	 * @return string
 	 */
-	public function getExpireAt() {
-		return $this->expireAt;
+	public function getExpiresAt() {
+		return $this->expiresAt;
 	}
 
 	/**
-	 * @param string $expireAt
+	 * @param string $expiresAt
 	 */
-	public function setExpireAt( $expireAt ) {
-		$this->expireAt = $expireAt;
+	public function setExpiresAt( $expiresAt ) {
+		$this->expiresAt = $expiresAt;
 	}
 
 	/**
@@ -102,14 +103,14 @@ abstract class OAuth2RefreshTokenModel extends Model {
 	/**
 	 * @return bool
 	 */
-	public function getIsRevoked(): bool {
+	public function getIsRevoked() {
 		return (bool)$this->isRevoked;
 	}
 
 	/**
 	 * @param bool $isRevoked
 	 */
-	public function setIsRevoked( bool $isRevoked ) {
+	public function setIsRevoked( $isRevoked ) {
 		$this->isRevoked = (int)$isRevoked;
 	}
 

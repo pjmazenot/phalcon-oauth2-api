@@ -9,8 +9,14 @@ use League\OAuth2\Client\Token\AccessToken;
  */
 class ExampleOAuth2Client {
 
-	/** @var GenericProvider */
+	/** @var GenericProvider $provider */
 	public $provider;
+
+	/** @var string $grantType */
+	public $grantType;
+
+	/** @var string $authParams */
+	public $authParams;
 
 	/** @var AccessToken */
 	public $accessToken;
@@ -20,8 +26,10 @@ class ExampleOAuth2Client {
 	 *
 	 * @param string $clientId
 	 * @param string $clientSecret
+	 * @param string $grantType
+	 * @param array $authParams
 	 */
-	public function __construct($clientId, $clientSecret) {
+	public function __construct($clientId, $clientSecret, $grantType, $authParams = []) {
 
 		// Note: the GenericProvider requires the `urlAuthorize` option, even though
 		// it's not used in the OAuth 2.0 client credentials grant type.
@@ -33,6 +41,9 @@ class ExampleOAuth2Client {
 			'urlAccessToken'          => 'http://' . $_SERVER['SERVER_NAME'] . '/oauth/access_token',
 			'urlResourceOwnerDetails' => 'http://' . $_SERVER['SERVER_NAME'] . '/resource'
 		]);
+
+		$this->grantType = $grantType;
+		$this->authParams = $authParams;
 
 	}
 
@@ -73,7 +84,7 @@ class ExampleOAuth2Client {
 				try {
 
 					// Try to get an access token using the client credentials grant.
-					$this->accessToken = $this->getProvider()->getAccessToken('client_credentials');
+					$this->accessToken = $this->getProvider()->getAccessToken($this->grantType, $this->authParams);
 
 					$this->setCachedToken($this->accessToken);
 

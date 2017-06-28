@@ -72,4 +72,12 @@ php docs/swagger/generate.php
 ## Tests
 
 ### Examples
+
+#### Custom sandbox
+
+This sandbox contains working examples of a client implementation.
+
+See the following files for more details:
+
 `/docs/examples/client-client_credentials.php`
+`/docs/examples/client-password.php`

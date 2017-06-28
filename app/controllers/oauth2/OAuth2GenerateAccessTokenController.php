@@ -86,12 +86,15 @@ class OAuth2GenerateAccessTokenController extends DefaultController {
 /**
  * Interface DocsOAuth2GenerateAccessTokenParameters
  *
+ * @TODO: Create separated swagger calls for each grant types
+ *
  * @package App\Controllers\OAuth2
  *
  * @SWG\Definition(
  *     definition="DocsOAuth2GenerateAccessTokenParameters",
  *     @SWG\Property(
  *         property="grant_type",
+ *         description="client_credentials|password",
  *         type="string"
  *     ),
  *     @SWG\Property(
@@ -105,6 +108,14 @@ class OAuth2GenerateAccessTokenController extends DefaultController {
  *     @SWG\Property(
  *         property="scope",
  *         type="string"
+ *     ),
+ *     @SWG\Property(
+ *         property="username",
+ *         type="string"
+ *     ),
+ *     @SWG\Property(
+ *         property="password",
+ *         type="password"
  *     ),
  *     @SWG\Property(
  *         property="redirect_uri",
@@ -131,6 +142,10 @@ interface DocsOAuth2GenerateAccessTokenParameters {}
  *     ),
  *     @SWG\Property(
  *         property="access_token",
+ *         type="string"
+ *     ),
+ *     @SWG\Property(
+ *         property="refresh_token",
  *         type="string"
  *     )
  * )

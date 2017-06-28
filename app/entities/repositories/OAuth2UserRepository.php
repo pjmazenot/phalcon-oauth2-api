@@ -6,6 +6,7 @@ use App\Entities\OAuth2User;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
+use Phalcon\Exception;
 use Phalcon\Mvc\Model\Resultset\Simple;
 
 class Oauth2UserRepository implements UserRepositoryInterface  {
@@ -18,7 +19,7 @@ class Oauth2UserRepository implements UserRepositoryInterface  {
 	 * @param string                $grantType    The grant type used
 	 * @param ClientEntityInterface $clientEntity
 	 *
-	 * @return UserEntityInterface
+	 * @return UserEntityInterface|bool
 	 */
 	public function getUserEntityByUserCredentials(
 		$username,
@@ -33,12 +34,12 @@ class Oauth2UserRepository implements UserRepositoryInterface  {
 		FROM oauth2_user AS u
 		JOIN oauth2_client_user AS cu ON cu.oauth2_user_id = u.id
 		JOIN oauth2_client_grant_type AS cgt ON cgt.oauth2_client_id = cu.oauth2_client_id
-		JOIN oauth2_grant_type AS gt ON gt.oauth2_grant_type_id = gt.id
+		JOIN oauth2_grant_type AS gt ON cgt.oauth2_grant_type_id = gt.id
 		WHERE 
-			u.username = ' . $username . ' 
-			AND u.username = ' . hash('sha512', $password) . ' 
+			u.username = "' . $username . '"
+			AND u.password = "' . hash('sha512', $password) . '"
 			AND cu.oauth2_client_id = ' . $clientEntity->getIdentifier() . ' 
-			AND gt.grant_type = ' . $grantType . ' 
+			AND gt.grant_type = "' . $grantType . '"
 		LIMIT 1';
 
 		// Base model
@@ -51,7 +52,7 @@ class Oauth2UserRepository implements UserRepositoryInterface  {
 			$user->getReadConnection()->query($sql)
 		);
 
-		return $users;
+		return !empty($users[0]) ? $users[0] : false;
 
 	}
 

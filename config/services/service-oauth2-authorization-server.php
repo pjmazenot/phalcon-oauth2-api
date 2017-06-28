@@ -21,6 +21,7 @@ $di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() /* use ($settings
 	$accessTokenRepository = new \App\Entities\Repositories\Oauth2AccessTokenRepository(); // instance of AccessTokenRepositoryInterface
 	$authCodeRepository = new \App\Entities\Repositories\Oauth2AuthCodeRepository(); // instance of AuthCodeRepositoryInterface
 	$refreshTokenRepository = new \App\Entities\Repositories\Oauth2RefreshTokenRepository(); // instance of RefreshTokenRepositoryInterface
+	$userRepository = new \App\Entities\Repositories\Oauth2UserRepository(); // instance of RefreshTokenRepositoryInterface
 
 	$privateKey = PATH_CONFIGURATION . 'keys/private.key';
 	$publicKey = PATH_CONFIGURATION . 'keys/public.cert';
@@ -62,6 +63,20 @@ $di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() /* use ($settings
 		$grant,
 		new \DateInterval('PT1H') // new access tokens will expire after an hour
 	);
+
+
+    $grant = new \League\OAuth2\Server\Grant\PasswordGrant(
+        $userRepository,
+        $refreshTokenRepository
+    );
+
+    $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // refresh tokens will expire after 1 month
+
+    // Enable the password grant on the server
+    $server->enableGrantType(
+        $grant,
+        new \DateInterval('PT1H') // access tokens will expire after 1 hour
+    );
 
 	return $server;
 

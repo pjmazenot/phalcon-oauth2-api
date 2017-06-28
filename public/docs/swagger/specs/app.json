@@ -49,7 +49,7 @@
         "DocsOAuth2GenerateAccessTokenParameters": {
             "properties": {
                 "grant_type": {
-                    "description": "Interface DocsOAuth2GenerateAccessTokenParameters",
+                    "description": "client_credentials|password",
                     "type": "string"
                 },
                 "client_id": {
@@ -63,6 +63,14 @@
                 "scope": {
                     "description": "Interface DocsOAuth2GenerateAccessTokenParameters",
                     "type": "string"
+                },
+                "username": {
+                    "description": "Interface DocsOAuth2GenerateAccessTokenParameters",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "Interface DocsOAuth2GenerateAccessTokenParameters",
+                    "type": "password"
                 },
                 "redirect_uri": {
                     "description": "Interface DocsOAuth2GenerateAccessTokenParameters",
@@ -81,6 +89,10 @@
                     "type": "string"
                 },
                 "access_token": {
+                    "description": "Interface DocsOAuth2GenerateAccessTokenResponse",
+                    "type": "string"
+                },
+                "refresh_token": {
                     "description": "Interface DocsOAuth2GenerateAccessTokenResponse",
                     "type": "string"
                 }
