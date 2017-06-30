@@ -13,15 +13,15 @@ require PATH_CONFIGURATION . '/config.php';
  * Use the CryptKey class to load the private key if a passphrase is set
  * E.g: $privateKey = new CryptKey('file://path/to/private.key', 'passphrase');
  */
-$di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() /* use ($settings) */ {
+$di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() use ($settings) {
 
 	// Init our repositories
-	$clientRepository = new App\Entities\Repositories\Oauth2ClientRepository(); // instance of ClientRepositoryInterface
-	$scopeRepository = new \App\Entities\Repositories\Oauth2ScopeRepository(); // instance of ScopeRepositoryInterface
-	$accessTokenRepository = new \App\Entities\Repositories\Oauth2AccessTokenRepository(); // instance of AccessTokenRepositoryInterface
-	$authCodeRepository = new \App\Entities\Repositories\Oauth2AuthCodeRepository(); // instance of AuthCodeRepositoryInterface
-	$refreshTokenRepository = new \App\Entities\Repositories\Oauth2RefreshTokenRepository(); // instance of RefreshTokenRepositoryInterface
-	$userRepository = new \App\Entities\Repositories\Oauth2UserRepository(); // instance of RefreshTokenRepositoryInterface
+	$clientRepository = new App\Entities\Repositories\Oauth2ClientRepository();
+	$scopeRepository = new \App\Entities\Repositories\Oauth2ScopeRepository();
+	$accessTokenRepository = new \App\Entities\Repositories\Oauth2AccessTokenRepository();
+	$authCodeRepository = new \App\Entities\Repositories\Oauth2AuthCodeRepository();
+	$refreshTokenRepository = new \App\Entities\Repositories\Oauth2RefreshTokenRepository();
+	$userRepository = new \App\Entities\Repositories\Oauth2UserRepository();
 
 	$privateKey = PATH_CONFIGURATION . 'keys/private.key';
 	$publicKey = PATH_CONFIGURATION . 'keys/public.cert';
@@ -34,49 +34,103 @@ $di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() /* use ($settings
 		$privateKey,
 		$publicKey
 	);
-	$grant = new \League\OAuth2\Server\Grant\AuthCodeGrant(
-		$authCodeRepository,
-		$refreshTokenRepository,
-		new \DateInterval('PT10M') // authorization codes will expire after 10 minutes
-	);
 
-	$grant->setRefreshTokenTTL(new \DateInterval('P1M')); // refresh tokens will expire after 1 month
+	// Define default ttl in case it's omitted in config file
+	$defaultAuthCodeTtl = new \DateInterval('PT10M'); // authorization codes will expire after 10 minutes
+	$defaultAccessTokenTtl = new \DateInterval('PT1H'); // access tokens will expire after 1 hour
+	$refreshAccessTokenTtl = new \DateInterval('P1M'); // refresh tokens will expire after 1 month
 
-	// Enable the authentication code grant on the server
-	$server->enableGrantType(
-		$grant,
-		new \DateInterval('PT1H') // access tokens will expire after 1 hour
-	);
+    // Add support for authorization code grant
+	if(!empty($settings['oauth2']['authorization_code']['activated'])) {
 
-	// Enable the client credentials grant on the server
-	$server->enableGrantType(
-		new \League\OAuth2\Server\Grant\ClientCredentialsGrant(),
-		new \DateInterval('PT1H') // access tokens will expire after 1 hour
-	);
+        $grant = new \League\OAuth2\Server\Grant\AuthCodeGrant(
+            $authCodeRepository,
+            $refreshTokenRepository,
+            (!empty($settings['oauth2']['authorization_code']['auth_code_ttl'])
+                ? $settings['oauth2']['authorization_code']['auth_code_ttl']
+                : $defaultAuthCodeTtl
+            )
+        );
 
+        $grant->setRefreshTokenTTL(
+            !empty($settings['oauth2']['authorization_code']['refresh_token_ttl'])
+                ? $settings['oauth2']['authorization_code']['refresh_token_ttl']
+                : $refreshAccessTokenTtl
+        );
 
-	$grant = new \League\OAuth2\Server\Grant\RefreshTokenGrant($refreshTokenRepository);
-	$grant->setRefreshTokenTTL(new \DateInterval('P1M')); // new refresh tokens will expire after 1 month
+        // Enable the authentication code grant on the server
+        $server->enableGrantType(
+            $grant,
+            (!empty($settings['oauth2']['authorization_code']['access_token_ttl'])
+                ? $settings['oauth2']['authorization_code']['access_token_ttl']
+                : $defaultAccessTokenTtl
+            )
+        );
 
-	// Enable the refresh token grant on the server
-	$server->enableGrantType(
-		$grant,
-		new \DateInterval('PT1H') // new access tokens will expire after an hour
-	);
+    }
 
+    // Add support for client credentials grant
+    if(!empty($settings['oauth2']['client_credentials']['activated'])) {
 
-    $grant = new \League\OAuth2\Server\Grant\PasswordGrant(
-        $userRepository,
-        $refreshTokenRepository
-    );
+        $clientCredentialGrant = new \League\OAuth2\Server\Grant\ClientCredentialsGrant();
 
-    $grant->setRefreshTokenTTL(new \DateInterval('P1M')); // refresh tokens will expire after 1 month
+        // Enable the client credentials grant on the server
+        $server->enableGrantType(
+            $clientCredentialGrant,
+            (!empty($settings['oauth2']['client_credentials']['access_token_ttl'])
+                ? $settings['oauth2']['client_credentials']['access_token_ttl']
+                : $defaultAccessTokenTtl
+            )
+        );
 
-    // Enable the password grant on the server
-    $server->enableGrantType(
-        $grant,
-        new \DateInterval('PT1H') // access tokens will expire after 1 hour
-    );
+    }
+
+    // Add support for refresh token grant
+    if(!empty($settings['oauth2']['refresh_token']['activated'])) {
+
+        $grant = new \League\OAuth2\Server\Grant\RefreshTokenGrant($refreshTokenRepository);
+
+        $grant->setRefreshTokenTTL(
+            !empty($settings['oauth2']['refresh_token']['refresh_token_ttl'])
+                ? $settings['oauth2']['refresh_token']['refresh_token_ttl']
+                : $refreshAccessTokenTtl
+        );
+
+        // Enable the refresh token grant on the server
+        $server->enableGrantType(
+            $grant,
+            (!empty($settings['oauth2']['refresh_token']['access_token_ttl'])
+                ? $settings['oauth2']['refresh_token']['access_token_ttl']
+                : $defaultAccessTokenTtl
+            )
+        );
+
+    }
+
+    // Add support for password grant
+    if(!empty($settings['oauth2']['password']['activated'])) {
+
+        $grant = new \League\OAuth2\Server\Grant\PasswordGrant(
+            $userRepository,
+            $refreshTokenRepository
+        );
+
+        $grant->setRefreshTokenTTL(
+            !empty($settings['oauth2']['password']['refresh_token_ttl'])
+                ? $settings['oauth2']['password']['refresh_token_ttl']
+                : $refreshAccessTokenTtl
+        );
+
+        // Enable the password grant on the server
+        $server->enableGrantType(
+            $grant,
+            (!empty($settings['oauth2']['password']['access_token_ttl'])
+                ? $settings['oauth2']['password']['access_token_ttl']
+                : $defaultAccessTokenTtl
+            )
+        );
+
+    }
 
 	return $server;
 
