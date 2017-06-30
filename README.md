@@ -57,7 +57,7 @@ The annotations should look like this:
 You can find some annotation examples in the existing files :
 
 `app/controllers/DefaultController.php` (Global annotations)  
-`app/controllers/OAuth2/OAuth2GenerateAccessTokenController.php` (Call, request parameters and response annotations)  
+`app/controllers/OAuth2/OAuth2AccessTokenController.php` (Call, request parameters and response annotations)  
 `app/entities/models/AccessTokenModel.php` (Entity annotations)  
 
 

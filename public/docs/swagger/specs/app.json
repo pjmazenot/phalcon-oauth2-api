@@ -24,7 +24,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/DocsOAuth2GenerateAccessTokenParameters"
+                            "$ref": "#/definitions/DocsOAuth2AccessTokenParameters"
                         }
                     }
                 ],
@@ -32,7 +32,7 @@
                     "200": {
                         "description": "Access token generated",
                         "schema": {
-                            "$ref": "#/definitions/DocsOAuth2GenerateAccessTokenResponse"
+                            "$ref": "#/definitions/DocsOAuth2AccessTokenResponse"
                         }
                     },
                     "422": {
@@ -46,54 +46,54 @@
         }
     },
     "definitions": {
-        "DocsOAuth2GenerateAccessTokenParameters": {
+        "DocsOAuth2AccessTokenParameters": {
             "properties": {
                 "grant_type": {
                     "description": "client_credentials|password",
                     "type": "string"
                 },
                 "client_id": {
-                    "description": "Interface DocsOAuth2GenerateAccessTokenParameters",
+                    "description": "Interface DocsOAuth2AccessTokenParameters",
                     "type": "string"
                 },
                 "client_secret": {
-                    "description": "Interface DocsOAuth2GenerateAccessTokenParameters",
+                    "description": "Interface DocsOAuth2AccessTokenParameters",
                     "type": "string"
                 },
                 "scope": {
-                    "description": "Interface DocsOAuth2GenerateAccessTokenParameters",
+                    "description": "Interface DocsOAuth2AccessTokenParameters",
                     "type": "string"
                 },
                 "username": {
-                    "description": "Interface DocsOAuth2GenerateAccessTokenParameters",
+                    "description": "Interface DocsOAuth2AccessTokenParameters",
                     "type": "string"
                 },
                 "password": {
-                    "description": "Interface DocsOAuth2GenerateAccessTokenParameters",
+                    "description": "Interface DocsOAuth2AccessTokenParameters",
                     "type": "password"
                 },
                 "redirect_uri": {
-                    "description": "Interface DocsOAuth2GenerateAccessTokenParameters",
+                    "description": "Interface DocsOAuth2AccessTokenParameters",
                     "type": "string"
                 }
             }
         },
-        "DocsOAuth2GenerateAccessTokenResponse": {
+        "DocsOAuth2AccessTokenResponse": {
             "properties": {
                 "token_type": {
-                    "description": "Interface DocsOAuth2GenerateAccessTokenResponse",
+                    "description": "Interface DocsOAuth2AccessTokenResponse",
                     "type": "string"
                 },
                 "expires_in": {
-                    "description": "Interface DocsOAuth2GenerateAccessTokenResponse",
+                    "description": "Interface DocsOAuth2AccessTokenResponse",
                     "type": "string"
                 },
                 "access_token": {
-                    "description": "Interface DocsOAuth2GenerateAccessTokenResponse",
+                    "description": "Interface DocsOAuth2AccessTokenResponse",
                     "type": "string"
                 },
                 "refresh_token": {
-                    "description": "Interface DocsOAuth2GenerateAccessTokenResponse",
+                    "description": "Interface DocsOAuth2AccessTokenResponse",
                     "type": "string"
                 }
             }

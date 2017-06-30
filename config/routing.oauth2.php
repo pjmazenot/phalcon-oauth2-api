@@ -4,8 +4,9 @@
 ///// OAuth2 routes
 
 // [POST] Generate token
-if(class_exists('App\Controllers\OAuth2\OAuth2GenerateAccessTokenController')) {
-	$app->post('/oauth/access_token', [new App\Controllers\OAuth2\OAuth2GenerateAccessTokenController(), 'generateToken']);
+if(class_exists('App\Controllers\OAuth2\OAuth2AccessTokenController')) {
+	$app->post('/oauth/access_token', [new App\Controllers\OAuth2\OAuth2AccessTokenController(), 'generateToken']);
+}
 }
 
 // [GET|POST|PUT|DELETE] Test
