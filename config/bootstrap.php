@@ -10,8 +10,6 @@ if(isset($_GET['debug'])) {
 	$listener->listen(true, true);
 }
 
-// @TODO: Capture errors
-
 /** @var \Phalcon\Loader $loader */
 require PATH_CONFIGURATION . '/loader.php';
 
@@ -63,6 +61,13 @@ try {
 
 	// Handle unhandled exceptions
 	$app->response->setContent('Unhandled exception: ' . $e->getMessage());
+	$app->response->setStatusCode(500, 'Server error')->send();
+	die;
+
+} catch (Error $e) {
+
+	// Handle unhandled exceptions
+	$app->response->setContent('Unhandled error: ' . $e->getMessage());
 	$app->response->setStatusCode(500, 'Server error')->send();
 	die;
 

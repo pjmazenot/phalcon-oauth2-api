@@ -43,13 +43,45 @@
                     }
                 }
             }
+        },
+        "/oauth/refresh_token": {
+            "post": {
+                "tags": [
+                    "oauth2"
+                ],
+                "summary": "Refresh an access token",
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/DocsOAuth2RefreshTokenParameters"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Access token generated",
+                        "schema": {
+                            "$ref": "#/definitions/DocsOAuth2RefreshTokenResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Error(s) in auth parameters"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
         }
     },
     "definitions": {
         "DocsOAuth2AccessTokenParameters": {
             "properties": {
                 "grant_type": {
-                    "description": "client_credentials|password",
+                    "description": "client_credentials|password|refresh_token",
                     "type": "string"
                 },
                 "client_id": {
@@ -75,6 +107,10 @@
                 "redirect_uri": {
                     "description": "Interface DocsOAuth2AccessTokenParameters",
                     "type": "string"
+                },
+                "type": {
+                    "description": "plain(default)|bearer",
+                    "type": "string"
                 }
             }
         },
@@ -94,6 +130,58 @@
                 },
                 "refresh_token": {
                     "description": "Interface DocsOAuth2AccessTokenResponse",
+                    "type": "string"
+                }
+            }
+        },
+        "DocsOAuth2RefreshTokenParameters": {
+            "properties": {
+                "grant_type": {
+                    "description": "client_credentials|password",
+                    "type": "string"
+                },
+                "client_id": {
+                    "description": "Interface DocsOAuth2RefreshTokenParameters",
+                    "type": "string"
+                },
+                "client_secret": {
+                    "description": "Interface DocsOAuth2RefreshTokenParameters",
+                    "type": "string"
+                },
+                "scope": {
+                    "description": "Interface DocsOAuth2RefreshTokenParameters",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "Interface DocsOAuth2RefreshTokenParameters",
+                    "type": "string"
+                },
+                "password": {
+                    "description": "Interface DocsOAuth2RefreshTokenParameters",
+                    "type": "password"
+                },
+                "redirect_uri": {
+                    "description": "Interface DocsOAuth2RefreshTokenParameters",
+                    "type": "string"
+                }
+            }
+        },
+        "DocsOAuth2RefreshTokenResponse": {
+            "properties": {
+                "token_type": {
+                    "description": "Interface DocsOAuth2RefreshTokenResponse",
+                    "type": "string"
+                },
+                "expires_in": {
+                    "description": "Interface DocsOAuth2RefreshTokenResponse",
+                    "type": "string"
+                },
+                "access_token": {
+                    "description": "Interface DocsOAuth2RefreshTokenResponse",
+                    "type": "string"
+                },
+                "refresh_token": {
+                    "description": "Interface DocsOAuth2RefreshTokenResponse",
                     "type": "string"
                 }
             }

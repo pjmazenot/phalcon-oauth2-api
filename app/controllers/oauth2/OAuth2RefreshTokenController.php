@@ -2,34 +2,35 @@
 
 namespace App\Controllers\OAuth2;
 
+use App\Classes\Responses\Psr7Response;
 use App\Controllers\DefaultController;
 use GuzzleHttp\Psr7\Response as GuzzlePsr7Response;
 use League\OAuth2\Server\Exception\OAuthServerException;
 
 /**
- * Class OAuth2AccessTokenController
+ * Class OAuth2RefreshTokenController
  *
  * @package App\Controllers\OAuth2
  */
-class OAuth2AccessTokenController extends DefaultController {
+class OAuth2RefreshTokenController extends DefaultController {
 
 	/**
 	 * Generate an access token
 	 *
 	 * @SWG\Post(
-	 *     path="/oauth/access_token",
-	 *     summary="Generate an access token",
+	 *     path="/oauth/refresh_token",
+	 *     summary="Refresh an access token",
 	 *     tags={"oauth2"},
 	 *     @SWG\Parameter(
 	 *         name="body",
 	 *         in="body",
 	 *         required=true,
-	 *         @SWG\Schema(ref="#/definitions/DocsOAuth2AccessTokenParameters")
+	 *         @SWG\Schema(ref="#/definitions/DocsOAuth2RefreshTokenParameters")
 	 *     ),
 	 *     @SWG\Response(
 	 *         response=200,
 	 *         description="Access token generated",
-	 *         @SWG\Schema(ref="#/definitions/DocsOAuth2AccessTokenResponse")
+	 *         @SWG\Schema(ref="#/definitions/DocsOAuth2RefreshTokenResponse")
 	 *     ),
 	 *     @SWG\Response(
 	 *         response=422,
@@ -41,7 +42,7 @@ class OAuth2AccessTokenController extends DefaultController {
 	 *     )
 	 * )
 	 */
-	public function generateToken() {
+	public function refreshToken() {
 
 	    $this->init();
 
@@ -50,14 +51,22 @@ class OAuth2AccessTokenController extends DefaultController {
 
 		try {
 
+		    // Init response
+            $responseType = $this->getRequest()->get('type');
+            if($responseType == 'bearer') {
+                $response = new GuzzlePsr7Response();
+            } else {
+                $response = new Psr7Response();
+            }
+
 			// Try to respond to the request
-			$generateResponse = $server->respondToAccessTokenRequest($this->getPsr7Request(), new GuzzlePsr7Response());
+			$generateResponse = $server->respondToAccessTokenRequest($this->getPsr7Request(), $response);
 
 			// Fix empty string result when using getContents()
             $generateResponse->getBody()->rewind();
 
 			// Send the response
-            $this->send(200, array_merge(json_decode($generateResponse->getBody()->getContents(), true)));
+            $this->send(200, json_decode($generateResponse->getBody()->getContents(), true));
 
 		} catch (OAuthServerException $e) {
 
@@ -84,17 +93,17 @@ class OAuth2AccessTokenController extends DefaultController {
 }
 
 /**
- * Interface DocsOAuth2AccessTokenParameters
+ * Interface DocsOAuth2RefreshTokenParameters
  *
  * @TODO: Create separated swagger calls for each grant types
  *
  * @package App\Controllers\OAuth2
  *
  * @SWG\Definition(
- *     definition="DocsOAuth2AccessTokenParameters",
+ *     definition="DocsOAuth2RefreshTokenParameters",
  *     @SWG\Property(
  *         property="grant_type",
- *         description="client_credentials|password|refresh_token",
+ *         description="client_credentials|password",
  *         type="string"
  *     ),
  *     @SWG\Property(
@@ -120,23 +129,18 @@ class OAuth2AccessTokenController extends DefaultController {
  *     @SWG\Property(
  *         property="redirect_uri",
  *         type="string"
- *     ),
- *     @SWG\Property(
- *         property="type",
- *         description="plain(default)|bearer",
- *         type="string"
  *     )
  * )
  */
-interface DocsOAuth2AccessTokenParameters {}
+interface DocsOAuth2RefreshTokenParameters {}
 
 /**
- * Interface DocsOAuth2AccessTokenResponse
+ * Interface DocsOAuth2RefreshTokenResponse
  *
  * @package App\Controllers\OAuth2
  *
  * @SWG\Definition(
- *     definition="DocsOAuth2AccessTokenResponse",
+ *     definition="DocsOAuth2RefreshTokenResponse",
  *     @SWG\Property(
  *         property="token_type",
  *         type="string"
@@ -155,4 +159,4 @@ interface DocsOAuth2AccessTokenParameters {}
  *     )
  * )
  */
-interface DocsOAuth2AccessTokenResponse {}
+interface DocsOAuth2RefreshTokenResponse {}

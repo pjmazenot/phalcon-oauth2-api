@@ -12,6 +12,8 @@ use GuzzleHttp\Psr7\Response as Psr7Response;
  */
 class OAuth2TestController extends DefaultController {
 
+    // @TODO: Add scope as prop or function (oauth2_test) as example for API controllers
+
 	public function test() {
 
 	    $this->init();

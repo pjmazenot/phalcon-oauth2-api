@@ -59,6 +59,7 @@ try {
 		case 'password':
 
 			// Retrieve request params
+			$type          = isset( $post_data['type'] ) ? $post_data['type'] : '';
 			$scope         = isset( $post_data['scope'] ) ? $post_data['scope'] : '';
 			$client_id     = isset( $post_data['client_id'] ) ? $post_data['client_id'] : '';
 			$client_secret = isset( $post_data['client_secret'] ) ? $post_data['client_secret'] : '';
@@ -71,20 +72,25 @@ try {
                 $client_secret,
                 'password',
                 [
+                    'type' => $type,
                     'username' => $username,
                     'password' => $password,
                 ]
             );
-			$access_token = $exampleOauth2Client->getAccessToken();
+			$token = $exampleOauth2Client->getAccessToken();
 
 			// Add the token to the response data
 			$response['status']  = 'success';
-			$response['bearer'] = $access_token;
+			$response['token'] = $token;
 
 			try {
 
 				// Test authentication using the API test url
-				$test = $exampleOauth2Client->request('get', 'http://' . $_SERVER['SERVER_NAME'] . '/oauth/test');
+                if($type == 'bearer') {
+                    $test = $exampleOauth2Client->request('get', 'http://' . $_SERVER['SERVER_NAME'] . '/oauth/test');
+                } else {
+                    $test = $exampleOauth2Client->request('get', 'http://' . $_SERVER['SERVER_NAME'] . '/oauth/test?access_token=' . $token->getToken());
+                }
 
 				// Add the authentication results to the response data
 				$response['api_test'] = [
@@ -103,6 +109,58 @@ try {
 			}
 
 			break;
+
+        case 'refresh_token':
+
+            // Retrieve request params
+            $type          = isset( $post_data['type'] ) ? $post_data['type'] : '';
+            $scope         = isset( $post_data['scope'] ) ? $post_data['scope'] : '';
+            $client_id     = isset( $post_data['client_id'] ) ? $post_data['client_id'] : '';
+            $client_secret = isset( $post_data['client_secret'] ) ? $post_data['client_secret'] : '';
+            $refresh_token = isset( $post_data['refresh_token'] ) ? $post_data['refresh_token'] : '';
+
+            // Instantiate the OAuth2 client and generate an access token
+            $exampleOauth2Client = new ExampleOAuth2Client(
+                $client_id,
+                $client_secret,
+                'refresh_token',
+                [
+                    'type' => $type,
+                    'refresh_token' => $refresh_token,
+                ]
+            );
+            $token = $exampleOauth2Client->refreshAccessToken($type);
+
+            // Add the token to the response data
+            $response['status']  = 'success';
+            $response['token'] = $token;
+
+            try {
+
+                // Test authentication using the API test url
+                if($type == 'bearer') {
+                    $test = $exampleOauth2Client->request('get', 'http://' . $_SERVER['SERVER_NAME'] . '/oauth/test');
+                } else {
+                    $test = $exampleOauth2Client->request('get', 'http://' . $_SERVER['SERVER_NAME'] . '/oauth/test?access_token=' . $token->getToken());
+                }
+
+                // Add the authentication results to the response data
+                $response['api_test'] = [
+                    'status' => 'success',
+                    'message' => $test
+                ];
+
+            } catch (Exception $e) {
+
+                // Add the authentication error to the response data
+                $response['api_test'] = [
+                    'status' => 'failed',
+                    'message' => $e->getMessage()
+                ];
+
+            }
+
+            break;
 
 		default:
 			$response['status']  = 'failed';

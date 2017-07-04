@@ -3,6 +3,7 @@
 namespace App\Entities;
 
 use App\Entities\Models\OAuth2AccessTokenModel;
+use App\Entities\Repositories\OAuth2AccessTokenScopeRepository;
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
@@ -37,7 +38,7 @@ class OAuth2AccessToken extends OAuth2AccessTokenModel implements AccessTokenEnt
      *
      * @return string
      */
-    public function getIdentifier(): string
+    public function getIdentifier()
     {
         return $this->getAccessToken();
     }
@@ -57,7 +58,7 @@ class OAuth2AccessToken extends OAuth2AccessTokenModel implements AccessTokenEnt
      *
      * @return \DateTime
      */
-    public function getExpiryDateTime(): \DateTime {
+    public function getExpiryDateTime() {
 
         if(!isset($this->expiryDatetime)) {
             $expiryDateTime       = new \DateTime($this->getExpireAt());
@@ -159,11 +160,18 @@ class OAuth2AccessToken extends OAuth2AccessTokenModel implements AccessTokenEnt
     }
 
     /**
-     * Return an array of scopes associated with the token.
+     * Get scopes
      *
-     * @return OAuth2AccessTokenScope[]
+     * @return OAuth2Scope[]
      */
     public function getScopes() {
+
+        if(!isset($this->scopes)) {
+
+            $accessTokenScopeRepository = new OAuth2AccessTokenScopeRepository();
+            $this->scopes = $accessTokenScopeRepository->getScopes($this);
+
+        }
 
         return $this->scopes;
 

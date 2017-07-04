@@ -20,10 +20,21 @@ $di->setShared(SERVICE_OAUTH2_RESOURCE_SERVER, function() /* use ($settings) */ 
 
     $publicKey = PATH_CONFIGURATION . 'keys/public.cert';
 
-	// Setup the authorization server
+    // Get access token from url
+    $accessToken = $this->getRequest()->get('access_token');
+
+    // Init validator
+    if(!empty($accessToken)) {
+        $authorizationValidator = new \App\Classes\OAuth2\PlainTokenValidator($accessTokenRepository, $accessToken);
+    } else {
+        $authorizationValidator = null;
+    }
+
+	// Setup the resource server
     $server = new \League\OAuth2\Server\ResourceServer(
         $accessTokenRepository,
-        $publicKey
+        $publicKey,
+        $authorizationValidator
     );
 
 	return $server;

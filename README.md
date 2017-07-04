@@ -3,6 +3,13 @@
 This repo contains a boilerplate project for a Phalcon API including an OAuth2 Server 
 (https://github.com/thephpleague/oauth2-server) to manage authentication and authorization checks.
 
+Currently support
+* client_credentials grant (bearer)
+* password grant (plain/bearer)
+* token_refresh grant (plain/bearer)
+* API requests validation (plain/bearer)
+* Client scripts/sandbox for the supported grant
+
 ### ******************* Disclaimer *******************
 
 This project is under construction
@@ -81,3 +88,4 @@ See the following files for more details:
 
 `/docs/examples/client-client_credentials.php`
 `/docs/examples/client-password.php`
+`/docs/examples/client-refresh_token.php`

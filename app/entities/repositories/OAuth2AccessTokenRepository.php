@@ -10,6 +10,11 @@ use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 
+/**
+ * Class Oauth2AccessTokenRepository
+ *
+ * @package App\Entities\Repositories
+ */
 class Oauth2AccessTokenRepository implements AccessTokenRepositoryInterface {
 
     /**

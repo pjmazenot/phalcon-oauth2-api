@@ -7,6 +7,10 @@
 if(class_exists('App\Controllers\OAuth2\OAuth2AccessTokenController')) {
 	$app->post('/oauth/access_token', [new App\Controllers\OAuth2\OAuth2AccessTokenController(), 'generateToken']);
 }
+
+// [POST] Refresh token
+if(class_exists('App\Controllers\OAuth2\OAuth2RefreshTokenController')) {
+	$app->post('/oauth/refresh_token', [new App\Controllers\OAuth2\OAuth2RefreshTokenController(), 'refreshToken']);
 }
 
 // [GET|POST|PUT|DELETE] Test

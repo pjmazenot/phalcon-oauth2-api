@@ -13,10 +13,11 @@ $loader->registerNamespaces([
 
     // App
     'App\Classes'                              => PATH_APPLICATION . '/classes/',
+    'App\Classes\OAuth2'                       => PATH_APPLICATION . '/classes/oauth2/',
     'App\Classes\Requests'                     => PATH_APPLICATION . '/classes/requests/',
     'App\Classes\Responses'                    => PATH_APPLICATION . '/classes/responses/',
     'App\Controllers'                          => PATH_APPLICATION . '/controllers/',
-    'App\Controllers\Oauth2'                   => PATH_APPLICATION . '/controllers/oauth2/',
+    'App\Controllers\OAuth2'                   => PATH_APPLICATION . '/controllers/oauth2/',
     'App\Entities'                             => PATH_APPLICATION . '/entities/',
     'App\Entities\Base'                        => PATH_APPLICATION . '/entities/base/',
     'App\Entities\Model'                       => PATH_APPLICATION . '/entities/model/',

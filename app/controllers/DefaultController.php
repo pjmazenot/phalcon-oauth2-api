@@ -70,7 +70,9 @@ class DefaultController extends Injectable {
         $server = $this->getDI()->get(SERVICE_OAUTH2_RESOURCE_SERVER);
 
         try {
+
             $server->validateAuthenticatedRequest($this->getPsr7Request());
+
         } catch (\Exception $e) {
 
             $this->send(401, [

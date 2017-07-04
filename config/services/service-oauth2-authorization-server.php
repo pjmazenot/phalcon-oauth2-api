@@ -13,7 +13,7 @@ require PATH_CONFIGURATION . '/config.php';
  * Use the CryptKey class to load the private key if a passphrase is set
  * E.g: $privateKey = new CryptKey('file://path/to/private.key', 'passphrase');
  */
-$di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() use ($settings) {
+$di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() use ($di, $settings) {
 
 	// Init our repositories
 	$clientRepository = new App\Entities\Repositories\Oauth2ClientRepository();
@@ -26,13 +26,23 @@ $di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() use ($settings) {
 	$privateKey = PATH_CONFIGURATION . 'keys/private.key';
 	$publicKey = PATH_CONFIGURATION . 'keys/public.cert';
 
+
+    // Init response
+    $responseType = $di->getRequest()->getPost('type');
+    if($responseType == 'bearer') {
+        $response = null;
+    } else {
+        $response = new \App\Classes\Responses\Psr7Response();
+    }
+
 	// Setup the authorization server
 	$server = new \League\OAuth2\Server\AuthorizationServer(
 		$clientRepository,
 		$accessTokenRepository,
 		$scopeRepository,
 		$privateKey,
-		$publicKey
+		$publicKey,
+        $response
 	);
 
 	// Define default ttl in case it's omitted in config file
@@ -88,7 +98,7 @@ $di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() use ($settings) {
     // Add support for refresh token grant
     if(!empty($settings['oauth2']['refresh_token']['activated'])) {
 
-        $grant = new \League\OAuth2\Server\Grant\RefreshTokenGrant($refreshTokenRepository);
+        $grant = new \App\Classes\OAuth2\PlainRefreshTokenGrant($refreshTokenRepository);
 
         $grant->setRefreshTokenTTL(
             !empty($settings['oauth2']['refresh_token']['refresh_token_ttl'])

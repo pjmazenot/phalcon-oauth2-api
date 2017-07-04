@@ -67,7 +67,6 @@ class ExampleOAuth2Client {
 	 * Get access token
 	 *
 	 * @return AccessToken
-	 * @throws Exception
 	 */
 	public function getAccessToken() {
 
@@ -81,21 +80,7 @@ class ExampleOAuth2Client {
 
 			if(!$cacheToken) {
 
-				try {
-
-					// Try to get an access token using the client credentials grant.
-					$this->accessToken = $this->getProvider()->getAccessToken($this->grantType, $this->authParams);
-
-					$this->setCachedToken($this->accessToken);
-
-					return $this->accessToken;
-
-				} catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
-
-					// Failed to get the access token
-					throw $e;
-
-				}
+			    return $this->requestNewToken();
 
 			} else {
 
@@ -106,6 +91,41 @@ class ExampleOAuth2Client {
 			}
 
 		}
+
+	}
+
+    /**
+     * Refresh access token
+     *
+     * @return AccessToken
+     */
+	public function refreshAccessToken($type) {
+
+        return $this->requestNewToken();
+
+    }
+
+    /**
+     * @return AccessToken
+     * @throws \League\OAuth2\Client\Provider\Exception\IdentityProviderException
+     */
+	protected function requestNewToken() {
+
+        try {
+
+            // Try to get an access token using the client credentials grant.
+            $this->accessToken = $this->getProvider()->getAccessToken($this->grantType, $this->authParams);
+
+            $this->setCachedToken($this->accessToken);
+
+            return $this->accessToken;
+
+        } catch (\League\OAuth2\Client\Provider\Exception\IdentityProviderException $e) {
+
+            // Failed to get the access token
+            throw $e;
+
+        }
 
 	}
 
