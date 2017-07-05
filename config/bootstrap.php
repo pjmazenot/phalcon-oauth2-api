@@ -1,8 +1,8 @@
 <?php
 
-require_once realpath(dirname(dirname(__FILE__))) . '/config/constants.php';
+require_once __DIR__ . '/constants.php';
 
-require dirname(__DIR__) . '/vendor/autoload.php';
+require_once PATH_VENDOR . '/autoload.php';
 
 // Activate debug for local development (Comment in production)
 if(isset($_GET['debug'])) {
@@ -11,8 +11,7 @@ if(isset($_GET['debug'])) {
 }
 
 /** @var \Phalcon\Loader $loader */
-require PATH_CONFIGURATION . '/loader.php';
-
+require_once PATH_CONFIGURATION . '/loader.php';
 
 try {
 
@@ -20,11 +19,11 @@ try {
 	$di = new Phalcon\Di\FactoryDefault();
 
 	// Load services in the DI
-	require PATH_CONFIGURATION . '/services/service-config.php';
-	require PATH_CONFIGURATION . '/services/service-databases.php';
-	require PATH_CONFIGURATION . '/services/service-log.php';
-	require PATH_CONFIGURATION . '/services/service-oauth2-authorization-server.php';
-	require PATH_CONFIGURATION . '/services/service-oauth2-resource-server.php';
+	require_once PATH_CONFIGURATION . '/services/service-config.php';
+	require_once PATH_CONFIGURATION . '/services/service-databases.php';
+	require_once PATH_CONFIGURATION . '/services/service-log.php';
+	require_once PATH_CONFIGURATION . '/services/service-oauth2-authorization-server.php';
+	require_once PATH_CONFIGURATION . '/services/service-oauth2-resource-server.php';
 
 	// Create the app
 	$app = new Phalcon\Mvc\Micro();

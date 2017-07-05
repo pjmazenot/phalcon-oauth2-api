@@ -5,7 +5,7 @@ $loader = new \Phalcon\Loader();
 
 // Register the tasks directory
 $loader->registerDirs([
-    PATH_APPLICATION . '/tasks/'
+	PATH_APPLICATION . '/tasks/'
 ]);
 
 // Register the namespaces

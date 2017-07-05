@@ -76,7 +76,7 @@ You can find some annotation examples in the existing files :
 To generate the Swagger documentation for the application (`app` folder) run the following command
 
 ```bash
-php public/docs/swagger/generate.php
+php app/cli.php swagger generate
 ```
 
 ## Tests
