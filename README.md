@@ -1,5 +1,16 @@
 # Phalcon API Boilerplate Project With OAuth2 Server
 
+### :warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning:
+### Disclaimer
+
+This project is under construction
+* Do not attempt to use in prod environment
+* PM me for requests/suggestions
+
+### :warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning::warning:
+
+[![Software License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 This repo contains a boilerplate project for a Phalcon API including an OAuth2 Server 
 (https://github.com/thephpleague/oauth2-server) to manage authentication and authorization checks.
 
@@ -9,15 +20,6 @@ Currently support
 * token_refresh grant (plain/bearer)
 * API requests validation (plain/bearer)
 * Client scripts/sandbox for the supported grant
-
-### ******************* Disclaimer *******************
-
-This project is under construction
-* Do not attempt to use in prod environment
-* PM me for requests/suggestions
-
-### ******************************************************
-
 
 ## Requirements
 
