@@ -20,7 +20,7 @@ class XmlResponse extends Response {
      *
      * @throws Exception
      */
-    public function __construct(int $code, array $data = []) {
+    public function __construct($code, array $data = []) {
 
 	    // @TODO: Support XML output
 	    // $xml = ArrayToXML::toXml($data);
@@ -28,18 +28,20 @@ class XmlResponse extends Response {
 
         parent::__construct($code, $xml);
 
+        $this->setHeader('Content-type', 'application/xml; charset=utf-8');
+
+        // @TODO: Move this on config file
+        $this->setHeader('Access-Control-Allow-Origin', '*');
+        $this->setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
+        // @FIXME: Sometime return 500 error
+        // header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
+
     }
 
     /**
      * Send response
      */
     public function send() {
-
-        header('HTTP/' . self::$defaultHttpVersion .' ' . $this->getStatusCode());
-        header('Content-type: application/xml; charset=utf-8');
-	    header('Access-Control-Allow-Origin: *');
-	    header('Access-Control-Allow-Headers: X-Requested-With');
-	    header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
 	    echo $this->getContent();
         die;
 

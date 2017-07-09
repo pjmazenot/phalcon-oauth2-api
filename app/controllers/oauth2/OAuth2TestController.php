@@ -2,8 +2,8 @@
 
 namespace App\Controllers\OAuth2;
 
+use App\Classes\OAuth2\Exceptions\AuthenticationException;
 use App\Controllers\DefaultController;
-use GuzzleHttp\Psr7\Response as Psr7Response;
 
 /**
  * Class OAuth2TestController
@@ -16,16 +16,31 @@ class OAuth2TestController extends DefaultController {
 
 	public function test() {
 
-	    $this->init();
-	    $this->validateAuthorization();
+	    try {
 
-	    $data = [
-	        'method' => $this->getRequest()->getMethod(),
-            'uri' => $this->getRequest()->getURI(),
-            'authorized' => true
-        ];
+            $this->init();
+            $this->validateAuthorization();
 
-        $this->send(200, $data);
+            $data = [
+                'method' => $this->getRequest()->getMethod(),
+                'uri' => $this->getRequest()->getURI(),
+                'authorized' => true
+            ];
+
+            return $this->getResponse(200, $data);
+
+        } catch (AuthenticationException $e) {
+
+            return $this->getResponse(401, [
+                'message' => $e->getMessage(),
+                'debug' => [
+                    'type' => get_class($e->getPrevious()),
+                    'file' => $e->getPrevious()->getFile(),
+                    'line' => $e->getPrevious()->getLine()
+                ]
+            ]);
+
+        }
 
 	}
 

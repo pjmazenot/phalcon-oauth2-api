@@ -19,25 +19,17 @@ class JsonResponse extends Response {
      *
      * @throws Exception
      */
-    public function __construct(int $code, array $data = []) {
+    public function __construct($code, array $data = []) {
 
         parent::__construct($code, json_encode($data));
 
-    }
+        $this->setHeader('Content-type', 'application/json; charset=utf-8');
 
-    /**
-     * Send response
-     */
-    public function send() {
-
-        header('HTTP/' . self::$defaultHttpVersion .' ' . $this->getStatusCode());
-	    header('Access-Control-Allow-Origin: *');
-	    header('Access-Control-Allow-Headers: X-Requested-With');
-        header('Content-type: application/json; charset=utf-8');
+        // @TODO: Move this on config file
+        $this->setHeader('Access-Control-Allow-Origin', '*');
+        $this->setHeader('Access-Control-Allow-Headers', 'X-Requested-With');
         // @FIXME: Sometime return 500 error
-	    // header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-	    echo $this->getContent();
-        die;
+        // header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
 
     }
         

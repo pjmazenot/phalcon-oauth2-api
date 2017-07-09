@@ -6,6 +6,7 @@ use App\Classes\Responses\Psr7Response;
 use App\Controllers\DefaultController;
 use GuzzleHttp\Psr7\Response as GuzzlePsr7Response;
 use League\OAuth2\Server\Exception\OAuthServerException;
+use Phalcon\Http\Response;
 
 /**
  * Class OAuth2RefreshTokenController
@@ -41,6 +42,8 @@ class OAuth2RefreshTokenController extends DefaultController {
 	 *         description="Server error"
 	 *     )
 	 * )
+     *
+     * @return Response
 	 */
 	public function refreshToken() {
 
@@ -66,20 +69,20 @@ class OAuth2RefreshTokenController extends DefaultController {
             $generateResponse->getBody()->rewind();
 
 			// Send the response
-            $this->send(200, json_decode($generateResponse->getBody()->getContents(), true));
+            return $this->getResponse(200, json_decode($generateResponse->getBody()->getContents(), true));
 
 		} catch (OAuthServerException $e) {
 
 			// All instances of OAuthServerException can be formatted into a HTTP response
 			// return $e->generateHttpResponse(new Psr7Response());
-			$this->send(500, [
+			return $this->getResponse(500, [
 				'error' => $e->getMessage(),
 				'message' => $e->getMessage(),
 			]);
 
 		} catch (\Exception $e) {
 
-			$this->send(500, [
+			return $this->getResponse(500, [
 				'code' => $e->getCode(),
 				'error' => $e->getMessage(),
 				'message' => $e->getMessage(),

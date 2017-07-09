@@ -2,6 +2,7 @@
 
 namespace App\Controllers;
 
+use App\Classes\OAuth2\Exceptions\AuthenticationException;
 use App\Classes\Requests\Psr7Request;
 use App\Classes\Responses\JsonResponse;
 use App\Classes\Responses\XmlResponse;
@@ -10,6 +11,7 @@ use League\OAuth2\Server\ResourceServer;
 use Phalcon\Di;
 use Phalcon\Di\Injectable;
 use Phalcon\Http\Request as PhalconRequest;
+use Phalcon\Http\Response;
 
 /**
  * Class DefaultController
@@ -63,6 +65,7 @@ class DefaultController extends Injectable {
 
     /**
      *
+     * @throws AuthenticationException
      */
 	protected function validateAuthorization() {
 
@@ -75,12 +78,7 @@ class DefaultController extends Injectable {
 
         } catch (\Exception $e) {
 
-            $this->send(401, [
-                'type' => get_class($e),
-                'message' => $e->getMessage(),
-                'file' => $e->getFile(),
-                'line' => $e->getLine()
-            ]);
+            throw new AuthenticationException('Authentication error', null, $e);
 
         }
 
@@ -112,9 +110,11 @@ class DefaultController extends Injectable {
 	 * Send the response to the client
 	 *
 	 * @param int $httpCode
-	 * @param array $response
+	 * @param array $data
+     *
+     * @return Response
 	 */
-    protected function send(int $httpCode, array $response) {
+    protected function getResponse($httpCode, array $data) {
 
 		$format = $this->request->get('format');
 
@@ -122,14 +122,12 @@ class DefaultController extends Injectable {
 		switch ($format) {
 
 			case 'xml':
-				$response = new XmlResponse($httpCode, $response);
-				$response->send();
+				return new XmlResponse($httpCode, $data);
 				break;
 
 			case 'json':
 			default:
-				$response = new JsonResponse($httpCode, $response);
-				$response->send();
+				return new JsonResponse($httpCode, $data);
 					break;
 
 		}

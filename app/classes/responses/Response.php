@@ -79,11 +79,11 @@ class Response extends PhalconResponse {
      * JSONResponse constructor
      *
      * @param int $code
-     * @param string $data
+     * @param string|array $data
      *
      * @throws Exception
      */
-    public function __construct(int $code, string $data = '') {
+    public function __construct($code, $data = '') {
 
         if(!isset(self::$availableHttpCodes[$code])) {
             throw new Exception('Unavailable HTTP code in response');
@@ -103,22 +103,6 @@ class Response extends PhalconResponse {
         }
 
         parent::__construct($data, $code, self::$availableHttpCodes[$code]);
-
-    }
-
-    /**
-     * Send response
-     *
-     * @TODO: Define Access-Control header values in configuration
-     */
-    public function send() {
-
-        header('HTTP/' . self::$defaultHttpVersion .' ' . $this->getStatusCode());
-	    header('Access-Control-Allow-Origin: *');
-	    header('Access-Control-Allow-Headers: X-Requested-With');
-	    header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
-	    echo $this->getContent();
-        die;
 
     }
         
