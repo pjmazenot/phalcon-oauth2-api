@@ -29,12 +29,34 @@ try {
 	$app = new Phalcon\Mvc\Micro();
 	$app->setDI($di);
 
-	// Setup HMAC Authentication callback to validate user before routing message
-	// Failure to validate will stop the process before going to proper Restful Route
-	//$app->setEventsManager(new \Classes\Events\HmacAuthenticate());
-
 	// Load routing
 	require_once __DIR__ . '/routing.php';
+
+	$app->before(function () use ($app, $settings) {
+
+		// @TODO: Change to custom or add a type in config
+
+		try {
+
+			$rateLimiter = new \App\Services\RateLimit\RateLimitMiddlewareCustom(
+				$app->request,
+				$app->response,
+				filter_var($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP) ? $_SERVER['REMOTE_ADDR'] : 'unknown', //@ TODO Create a lib to get client IP
+				$settings['oauth2']['rate_limit']['default']['rules']
+			);
+			$rateLimiter->checkLimit();
+
+		} catch (\App\Services\RateLimit\Exceptions\RateLimitException $e) {
+
+			// Handle rate limit exceptions
+			$app->response->setContent('Rate limit error: ' . $e->getMessage());
+			$app->response->setStatusCode(429, 'Too Many Requests');
+            $app->response->send();
+			die;
+
+		}
+
+	});
 
 	// Default handler function that runs when no route was matched
 	$app->notFound(function () use ($app) {
@@ -52,6 +74,8 @@ try {
 		die;
 
 	});
+
+	$app->after(function () {});
 
 	// Process the request
 	$app->handle();

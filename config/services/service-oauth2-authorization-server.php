@@ -51,28 +51,28 @@ $di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() use ($di, $settin
 	$refreshAccessTokenTtl = new \DateInterval('P1M'); // refresh tokens will expire after 1 month
 
     // Add support for authorization code grant
-	if(!empty($settings['oauth2']['authorization_code']['activated'])) {
+	if(!empty($settings['oauth2']['grants']['authorization_code']['activated'])) {
 
         $grant = new \League\OAuth2\Server\Grant\AuthCodeGrant(
             $authCodeRepository,
             $refreshTokenRepository,
-            (!empty($settings['oauth2']['authorization_code']['auth_code_ttl'])
-                ? $settings['oauth2']['authorization_code']['auth_code_ttl']
+            (!empty($settings['oauth2']['grants']['authorization_code']['auth_code_ttl'])
+                ? $settings['oauth2']['grants']['authorization_code']['auth_code_ttl']
                 : $defaultAuthCodeTtl
             )
         );
 
         $grant->setRefreshTokenTTL(
-            !empty($settings['oauth2']['authorization_code']['refresh_token_ttl'])
-                ? $settings['oauth2']['authorization_code']['refresh_token_ttl']
+            !empty($settings['oauth2']['grants']['authorization_code']['refresh_token_ttl'])
+                ? $settings['oauth2']['grants']['authorization_code']['refresh_token_ttl']
                 : $refreshAccessTokenTtl
         );
 
         // Enable the authentication code grant on the server
         $server->enableGrantType(
             $grant,
-            (!empty($settings['oauth2']['authorization_code']['access_token_ttl'])
-                ? $settings['oauth2']['authorization_code']['access_token_ttl']
+            (!empty($settings['oauth2']['grants']['authorization_code']['access_token_ttl'])
+                ? $settings['oauth2']['grants']['authorization_code']['access_token_ttl']
                 : $defaultAccessTokenTtl
             )
         );
@@ -80,15 +80,15 @@ $di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() use ($di, $settin
     }
 
     // Add support for client credentials grant
-    if(!empty($settings['oauth2']['client_credentials']['activated'])) {
+    if(!empty($settings['oauth2']['grants']['client_credentials']['activated'])) {
 
         $clientCredentialGrant = new \League\OAuth2\Server\Grant\ClientCredentialsGrant();
 
         // Enable the client credentials grant on the server
         $server->enableGrantType(
             $clientCredentialGrant,
-            (!empty($settings['oauth2']['client_credentials']['access_token_ttl'])
-                ? $settings['oauth2']['client_credentials']['access_token_ttl']
+            (!empty($settings['oauth2']['grants']['client_credentials']['access_token_ttl'])
+                ? $settings['oauth2']['grants']['client_credentials']['access_token_ttl']
                 : $defaultAccessTokenTtl
             )
         );
@@ -96,21 +96,21 @@ $di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() use ($di, $settin
     }
 
     // Add support for refresh token grant
-    if(!empty($settings['oauth2']['refresh_token']['activated'])) {
+    if(!empty($settings['oauth2']['grants']['refresh_token']['activated'])) {
 
         $grant = new \App\Classes\OAuth2\PlainRefreshTokenGrant($refreshTokenRepository);
 
         $grant->setRefreshTokenTTL(
-            !empty($settings['oauth2']['refresh_token']['refresh_token_ttl'])
-                ? $settings['oauth2']['refresh_token']['refresh_token_ttl']
+            !empty($settings['oauth2']['grants']['refresh_token']['refresh_token_ttl'])
+                ? $settings['oauth2']['grants']['refresh_token']['refresh_token_ttl']
                 : $refreshAccessTokenTtl
         );
 
         // Enable the refresh token grant on the server
         $server->enableGrantType(
             $grant,
-            (!empty($settings['oauth2']['refresh_token']['access_token_ttl'])
-                ? $settings['oauth2']['refresh_token']['access_token_ttl']
+            (!empty($settings['oauth2']['grants']['refresh_token']['access_token_ttl'])
+                ? $settings['oauth2']['grants']['refresh_token']['access_token_ttl']
                 : $defaultAccessTokenTtl
             )
         );
@@ -118,7 +118,7 @@ $di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() use ($di, $settin
     }
 
     // Add support for password grant
-    if(!empty($settings['oauth2']['password']['activated'])) {
+    if(!empty($settings['oauth2']['grants']['password']['activated'])) {
 
         $grant = new \League\OAuth2\Server\Grant\PasswordGrant(
             $userRepository,
@@ -126,16 +126,16 @@ $di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() use ($di, $settin
         );
 
         $grant->setRefreshTokenTTL(
-            !empty($settings['oauth2']['password']['refresh_token_ttl'])
-                ? $settings['oauth2']['password']['refresh_token_ttl']
+            !empty($settings['oauth2']['grants']['password']['refresh_token_ttl'])
+                ? $settings['oauth2']['grants']['password']['refresh_token_ttl']
                 : $refreshAccessTokenTtl
         );
 
         // Enable the password grant on the server
         $server->enableGrantType(
             $grant,
-            (!empty($settings['oauth2']['password']['access_token_ttl'])
-                ? $settings['oauth2']['password']['access_token_ttl']
+            (!empty($settings['oauth2']['grants']['password']['access_token_ttl'])
+                ? $settings['oauth2']['grants']['password']['access_token_ttl']
                 : $defaultAccessTokenTtl
             )
         );
