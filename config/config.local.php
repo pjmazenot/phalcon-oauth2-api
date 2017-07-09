@@ -1,5 +1,4 @@
 <?php
-
 $settings = [
     'application' => [
         'environment' => 'local',
@@ -43,8 +42,8 @@ $settings = [
 	    'rate_limit' => [
 	    	'default' => [
 	    		'rules' => [
-	    			new \App\Services\RateLimit\RateLimitRule(10, 1),
-	    			//new \App\Services\RateLimit\RateLimitRule(30, 3600),
+	    			new \App\Common\Services\RateLimit\RateLimitRule(10, 1),
+	    			//new \App\Common\Services\RateLimit\RateLimitRule(30, 3600),
 			    ]
 		    ]
 	    ]

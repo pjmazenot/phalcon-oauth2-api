@@ -16,7 +16,7 @@ require PATH_CONFIGURATION . '/config.php';
 $di->setShared(SERVICE_OAUTH2_RESOURCE_SERVER, function() /* use ($settings) */ {
 
 	// Init our repositories
-	$accessTokenRepository = new \App\Entities\Repositories\Oauth2AccessTokenRepository(); // instance of AccessTokenRepositoryInterface
+	$accessTokenRepository = new \App\OAuth2\Entities\Repositories\Oauth2AccessTokenRepository(); // instance of AccessTokenRepositoryInterface
 
     $publicKey = PATH_CONFIGURATION . 'keys/public.cert';
 
@@ -25,7 +25,7 @@ $di->setShared(SERVICE_OAUTH2_RESOURCE_SERVER, function() /* use ($settings) */ 
 
     // Init validator
     if(!empty($accessToken)) {
-        $authorizationValidator = new \App\Classes\OAuth2\PlainTokenValidator($accessTokenRepository, $accessToken);
+        $authorizationValidator = new \App\OAuth2\Classes\PlainTokenValidator($accessTokenRepository, $accessToken);
     } else {
         $authorizationValidator = null;
     }

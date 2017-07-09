@@ -1,2 +1,4 @@
 <?php
-require_once '../config/bootstrap.php';
+
+// Load application
+require_once '../app/bootstrap.php';

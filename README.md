@@ -66,9 +66,9 @@ The annotations should look like this:
 
 You can find some annotation examples in the existing files :
 
-`app/controllers/DefaultController.php` (Global annotations)  
-`app/controllers/OAuth2/OAuth2AccessTokenController.php` (Call, request parameters and response annotations)  
-`app/entities/models/AccessTokenModel.php` (Entity annotations)  
+`app/common/controllers/DefaultController.php` (Global annotations)  
+`app/oauth2/controllers/OAuth2AccessTokenController.php` (Call, request parameters and response annotations)  
+`app/oauth2/entities/models/AccessTokenModel.php` (Entity annotations)  
 
 
 #### Generate/update documentation
@@ -76,7 +76,7 @@ You can find some annotation examples in the existing files :
 To generate the Swagger documentation for the application (`app` folder) run the following command
 
 ```bash
-php app/cli.php swagger generate
+php app/cli/cli.php swagger generate
 ```
 
 ## Tests

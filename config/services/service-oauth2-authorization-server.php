@@ -16,12 +16,12 @@ require PATH_CONFIGURATION . '/config.php';
 $di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() use ($di, $settings) {
 
 	// Init our repositories
-	$clientRepository = new App\Entities\Repositories\Oauth2ClientRepository();
-	$scopeRepository = new \App\Entities\Repositories\Oauth2ScopeRepository();
-	$accessTokenRepository = new \App\Entities\Repositories\Oauth2AccessTokenRepository();
-	$authCodeRepository = new \App\Entities\Repositories\Oauth2AuthCodeRepository();
-	$refreshTokenRepository = new \App\Entities\Repositories\Oauth2RefreshTokenRepository();
-	$userRepository = new \App\Entities\Repositories\Oauth2UserRepository();
+	$clientRepository = new App\OAuth2\Entities\Repositories\Oauth2ClientRepository();
+	$scopeRepository = new \App\OAuth2\Entities\Repositories\Oauth2ScopeRepository();
+	$accessTokenRepository = new \App\OAuth2\Entities\Repositories\Oauth2AccessTokenRepository();
+	$authCodeRepository = new \App\OAuth2\Entities\Repositories\Oauth2AuthCodeRepository();
+	$refreshTokenRepository = new \App\OAuth2\Entities\Repositories\Oauth2RefreshTokenRepository();
+	$userRepository = new \App\OAuth2\Entities\Repositories\Oauth2UserRepository();
 
 	$privateKey = PATH_CONFIGURATION . 'keys/private.key';
 	$publicKey = PATH_CONFIGURATION . 'keys/public.cert';
@@ -32,7 +32,7 @@ $di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() use ($di, $settin
     if($responseType == 'bearer') {
         $response = null;
     } else {
-        $response = new \App\Classes\Responses\Psr7Response();
+        $response = new \App\Common\Classes\Responses\Psr7Response();
     }
 
 	// Setup the authorization server
@@ -98,7 +98,7 @@ $di->setShared(SERVICE_OAUTH2_AUTHORIZATION_SERVER, function() use ($di, $settin
     // Add support for refresh token grant
     if(!empty($settings['oauth2']['grants']['refresh_token']['activated'])) {
 
-        $grant = new \App\Classes\OAuth2\PlainRefreshTokenGrant($refreshTokenRepository);
+        $grant = new \App\OAuth2\Classes\PlainRefreshTokenGrant($refreshTokenRepository);
 
         $grant->setRefreshTokenTTL(
             !empty($settings['oauth2']['grants']['refresh_token']['refresh_token_ttl'])
