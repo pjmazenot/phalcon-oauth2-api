@@ -1,4 +1,4 @@
-<?php $title = 'Generate access token by username/password'; ?>
+<?php $title = 'Generate access token by username/password then generate a refresh token'; ?>
 
 <?php include 'partials/header.php'; ?>
 
